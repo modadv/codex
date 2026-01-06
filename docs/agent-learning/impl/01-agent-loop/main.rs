@@ -24,10 +24,7 @@ fn main() {
         agent.run(rx_sub, tx_event);
     });
 
-    let submission = Submission {
-        id: 1,
-        user_input,
-    };
+    let submission = Submission { id: 1, user_input };
     let _ = tx_sub.send(submission);
     drop(tx_sub);
 

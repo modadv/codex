@@ -1,4 +1,5 @@
-use std::sync::mpsc::{Receiver, Sender};
+use std::sync::mpsc::Receiver;
+use std::sync::mpsc::Sender;
 use std::thread;
 use std::time::Duration;
 

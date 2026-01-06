@@ -8,12 +8,28 @@ pub struct Submission {
 
 #[derive(Debug, Clone)]
 pub enum Event {
-    SessionConfigured { session_id: String },
-    TurnStarted { submission_id: u64 },
-    ModelDelta { submission_id: u64, text: String },
-    ToolCall { submission_id: u64, name: String, args: String },
-    ToolResult { submission_id: u64, output: String },
-    TurnCompleted { submission_id: u64 },
+    SessionConfigured {
+        session_id: String,
+    },
+    TurnStarted {
+        submission_id: u64,
+    },
+    ModelDelta {
+        submission_id: u64,
+        text: String,
+    },
+    ToolCall {
+        submission_id: u64,
+        name: String,
+        args: String,
+    },
+    ToolResult {
+        submission_id: u64,
+        output: String,
+    },
+    TurnCompleted {
+        submission_id: u64,
+    },
 }
 
 impl fmt::Display for Event {
@@ -36,13 +52,19 @@ impl fmt::Display for Event {
                 name,
                 args,
             } => {
-                write!(f, "ToolCall submission_id={submission_id} name={name} args={args}")
+                write!(
+                    f,
+                    "ToolCall submission_id={submission_id} name={name} args={args}"
+                )
             }
             Event::ToolResult {
                 submission_id,
                 output,
             } => {
-                write!(f, "ToolResult submission_id={submission_id} output={output}")
+                write!(
+                    f,
+                    "ToolResult submission_id={submission_id} output={output}"
+                )
             }
             Event::TurnCompleted { submission_id } => {
                 write!(f, "TurnCompleted submission_id={submission_id}")
