@@ -7,6 +7,7 @@ Understand how Codex represents a conversation turn as a stream of events, and h
 - Submission/Event queue: UI or caller submits work; core emits events describing progress and outputs.
 - Conversation lifecycle: configure session -> turns -> items -> completion.
 - Event mapping: model/tool outputs map into protocol events consumed by UI or app-server.
+- Reasoning vs assistant output: separate deltas for chain-of-thought vs final response.
 
 ## Key code map (start here)
 - Agent core loop: codex-rs/core/src/codex.rs
@@ -50,7 +51,7 @@ Understand how Codex represents a conversation turn as a stream of events, and h
   - Identify the function that turns model stream events into protocol events.
   - Identify where tool output is formatted for the model.
 - Draw a quick sequence diagram from codex.rs and protocol.rs.
- - Run the minimal agent loop: `docs/agent-learning/impl/01-agent-loop` (see README).
+- Run the minimal agent loop: `docs/agent-learning/impl/01-agent-loop` (see README).
 
 ## Notes
 - Keep a running glossary of terms: Submission, Event, Turn, Item, ToolCall.

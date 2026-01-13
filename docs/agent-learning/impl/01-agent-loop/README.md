@@ -22,7 +22,7 @@ rustc main.rs -o agent_demo
 ```
 
 ## Expected behavior
-- Prints events in order (session configured, turn started, deltas, tool, completed).
+- Prints events in order (session configured, turn started, reasoning deltas, assistant deltas, tool, completed).
 
 ## Next
 - Add a real shell exec and output truncation in Chapter 2.

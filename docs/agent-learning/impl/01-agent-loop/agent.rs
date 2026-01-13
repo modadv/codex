@@ -25,9 +25,17 @@ impl Agent {
                 submission_id: submit_id,
             });
 
-            // Simulated model streaming.
-            for token in fake_model_stream(&submission.user_input) {
-                let _ = tx_event.send(Event::ModelDelta {
+            // Simulated model streaming (reasoning + assistant).
+            for token in fake_reasoning_stream(&submission.user_input) {
+                let _ = tx_event.send(Event::ReasoningDelta {
+                    submission_id: submit_id,
+                    text: token,
+                });
+                thread::sleep(Duration::from_millis(50));
+            }
+
+            for token in fake_assistant_stream(&submission.user_input) {
+                let _ = tx_event.send(Event::AssistantDelta {
                     submission_id: submit_id,
                     text: token,
                 });
@@ -49,6 +57,23 @@ impl Agent {
                 output,
             });
 
+            // Simulate feeding tool result back into the model and continue streaming.
+            for token in fake_reasoning_stream_after_tool(&submission.user_input) {
+                let _ = tx_event.send(Event::ReasoningDelta {
+                    submission_id: submit_id,
+                    text: token,
+                });
+                thread::sleep(Duration::from_millis(50));
+            }
+
+            for token in fake_assistant_stream_after_tool(&submission.user_input) {
+                let _ = tx_event.send(Event::AssistantDelta {
+                    submission_id: submit_id,
+                    text: token,
+                });
+                thread::sleep(Duration::from_millis(50));
+            }
+
             let _ = tx_event.send(Event::TurnCompleted {
                 submission_id: submit_id,
             });
@@ -56,12 +81,27 @@ impl Agent {
     }
 }
 
-fn fake_model_stream(input: &str) -> Vec<String> {
-    let mut out = Vec::new();
-    out.push("thinking:".to_string());
-    for word in input.split_whitespace() {
-        out.push(format!(" {word}"));
-    }
-    out.push(" -> done".to_string());
-    out
+fn fake_reasoning_stream(input: &str) -> Vec<String> {
+    vec![
+        "thinking:".to_string(),
+        format!(" plan for '{input}'"),
+    ]
+}
+
+fn fake_assistant_stream(input: &str) -> Vec<String> {
+    vec![
+        " answer:".to_string(),
+        format!(" initial response to '{input}'"),
+    ]
+}
+
+fn fake_reasoning_stream_after_tool(input: &str) -> Vec<String> {
+    vec![
+        "tool check:".to_string(),
+        format!(" tool ok for '{input}'"),
+    ]
+}
+
+fn fake_assistant_stream_after_tool(_input: &str) -> Vec<String> {
+    vec![" -> final answer".to_string()]
 }

@@ -14,7 +14,11 @@ pub enum Event {
     TurnStarted {
         submission_id: u64,
     },
-    ModelDelta {
+    ReasoningDelta {
+        submission_id: u64,
+        text: String,
+    },
+    AssistantDelta {
         submission_id: u64,
         text: String,
     },
@@ -41,11 +45,17 @@ impl fmt::Display for Event {
             Event::TurnStarted { submission_id } => {
                 write!(f, "TurnStarted submission_id={submission_id}")
             }
-            Event::ModelDelta {
+            Event::ReasoningDelta {
                 submission_id,
                 text,
             } => {
-                write!(f, "ModelDelta submission_id={submission_id} text={text}")
+                write!(f, "ReasoningDelta submission_id={submission_id} text={text}")
+            }
+            Event::AssistantDelta {
+                submission_id,
+                text,
+            } => {
+                write!(f, "AssistantDelta submission_id={submission_id} text={text}")
             }
             Event::ToolCall {
                 submission_id,
